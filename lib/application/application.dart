@@ -31,9 +31,10 @@ class WeatherAppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final seedColor = context.select(
-          (WeatherCubit cubit) => cubit.state.weather.toColor,
+          (WeatherCubit cubit) => cubit.state.weather.weatherInfo.toColor,
     );
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,
@@ -42,14 +43,14 @@ class WeatherAppView extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: seedColor),
         textTheme: GoogleFonts.kanitTextTheme(),
       ),
-      //home: const WeatherPage(),
+      home: const WeatherPage(),
     );
   }
 }
 
-extension on Weather {
+extension on WeatherInformation {
   Color get toColor {
-    switch (weatherInfo.condition) {
+    switch (condition) {
       case WeatherCondition.clear:
         return Colors.yellow;
       case WeatherCondition.snowy:

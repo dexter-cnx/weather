@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../application.dart';
 import '../../repositories/weathers/weathers.dart';
 
 part 'weather_cubit.g.dart';
@@ -15,85 +16,86 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
 
   Future<void> fetchWeather(String city) async {
     if (city.isNotEmpty) {
+      try {
+        final location = await _weatherRepository.locationSearch(city);
+
+        fetchWeatherByLocation(location);
+      } on Exception  {
+        emit(state.copyWith(status: WeatherStatus.failure));
+      }
+    }
+  }
+
+  set index(int index) {
+    if (state.status.isSuccess) {
+      emit(state.copyWith(currentIndex: index));
+    }
+  }
+
+  Future<Location> getLocationByCity(String city) async {
+    return await _weatherRepository.locationSearch(city);
+  }
+
+  Future<void> fetchWeatherByLocation(Location location) async {
+    if (location.name.isNotEmpty) {
       emit(state.copyWith(status: WeatherStatus.loading));
       try {
 
 
         final weather = Weather.fromRepository(
-          await _weatherRepository.getWeatherByCityName(city),
+          await _weatherRepository.getWeatherByLocation(location),
         );
-        // final weather = Forecast.fromRepository(
-        //   await _weatherRepository.get(city),
-        // );
+        final forecast = Forecast.fromRepository(
+          await _weatherRepository.getForecastByLocation(location),
+        );
 
         emit(
           state.copyWith(
             status: WeatherStatus.success,
             weather: weather,
+            forecast: forecast,
           ),
         );
-      } on Exception {
+      } on Exception  {
         emit(state.copyWith(status: WeatherStatus.failure));
       }
     }
-    // if (city == null || city.isEmpty) return;
-    //
-    // emit(state.copyWith(status: WeatherStatus.loading));
-    //
-    // try {
-    //   final weather = Weather.fromRepository(
-    //     await _weatherRepository.getWeather(city),
-    //   );
-    //   final units = state.temperatureUnits;
-    //   final value = units.isFahrenheit
-    //       ? weather.temperature.value.toFahrenheit()
-    //       : weather.temperature.value;
-    //
-    //   emit(
-    //     state.copyWith(
-    //       status: WeatherStatus.success,
-    //       temperatureUnits: units,
-    //       weather: weather.copyWith(temperature: Temperature(value: value)),
-    //     ),
-    //   );
-    // } on Exception {
-    //   emit(state.copyWith(status: WeatherStatus.failure));
-    // }
   }
 
   Future<void> refreshWeather() async {
-    // if (!state.status.isSuccess) return;
-    // if (state.weather == Weather.empty) return;
-    // try {
-    //   final weather = Weather.fromRepository(
-    //     await _weatherRepository.getWeather(state.weather.location),
-    //   );
-    //   final units = state.temperatureUnits;
-    //   final value = units.isFahrenheit
-    //       ? weather.temperature.value.toFahrenheit()
-    //       : weather.temperature.value;
-    //
-    //   emit(
-    //     state.copyWith(
-    //       status: WeatherStatus.success,
-    //       temperatureUnits: units,
-    //       weather: weather.copyWith(temperature: Temperature(value: value)),
-    //     ),
-    //   );
-    // } on Exception {
-    //   emit(state);
-    // }
+    if (!state.status.isSuccess) return;
+    if (state.weather == Weather.empty && state.forecast == Forecast.empty) return;
+    try {
+      final location = await _weatherRepository.locationSearch(state.weather.location );
+
+      final weather = Weather.fromRepository(
+        await _weatherRepository.getWeatherByLocation(location),
+      );
+      final forecast = Forecast.fromRepository(
+        await _weatherRepository.getForecastByLocation(location),
+      );
+
+      emit(
+        state.copyWith(
+          status: WeatherStatus.success,
+          weather: weather,
+          forecast: forecast,
+        ),
+      );
+
+    } on Exception {
+      emit(state);
+    }
   }
 
   void toggleUnits() {
     final units = state.temperatureUnits.isFahrenheit
         ? TemperatureUnits.celsius
         : TemperatureUnits.fahrenheit;
+    logger.i(units.name);
 
     emit(state.copyWith(temperatureUnits: units));
   }
-
-
 
   @override
   WeatherState fromJson(Map<String, dynamic> json) =>

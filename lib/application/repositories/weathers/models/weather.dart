@@ -55,6 +55,10 @@ class WeatherInformation extends Equatable {
 
   @override
   List<Object> get props => [temperature,humidity,condition,dateTime];
+
+  String formattedTemperature(TemperatureUnits units) {
+    return '''${units.fromKelvin(temperature).toStringAsPrecision(2)}°${units.isCelsius ? 'C' : 'F'}''';
+  }
 }
 
 
@@ -107,7 +111,6 @@ class Weather extends Equatable {
 
   factory Weather.fromRepository(Weather weather) => weather;
 
-
 }
 
 
@@ -120,16 +123,6 @@ class Forecast extends Equatable {
     required this.weatherInfos,
   });
 
-
-
-  // factory Weather.fromRepository(weather_repository.Weather weather) {
-  //   return Weather(
-  //     condition: weather.condition,
-  //     lastUpdated: DateTime.now(),
-  //     location: weather.location,
-  //     temperature: Temperature(value: weather.temperature),
-  //   );
-  // }
 
   static final empty = Forecast(
       location: '--',
@@ -159,4 +152,6 @@ class Forecast extends Equatable {
       weatherInfos: weatherInfos ?? this.weatherInfos,
     );
   }
+
+  factory Forecast.fromRepository(Forecast forecast) => forecast;
 }

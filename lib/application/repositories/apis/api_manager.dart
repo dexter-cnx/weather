@@ -47,7 +47,7 @@ class ApiManager {
   final openWeatherURL = 'https://api.openweathermap.org/data/2.5';
 
   final weather = '/weather?appid=$openWeatherApiKey';
-  final forecastWholeDay = '/forecast?appid=$openWeatherApiKey&cnt=8';
+  final forecastWholeDay = '/forecast?appid=$openWeatherApiKey';
 
 
   String geoCodingByNameURI(String name) => "$geocoding&name=$name";
@@ -71,37 +71,15 @@ class ApiInterceptor extends Interceptor {
   ApiInterceptor(this.apiManager);
 
 
-
-  // @override
-  // void onError(
-  //     DioException err,
-  //     ErrorInterceptorHandler handler,
-  //     ) async {
-  //   if (err.response?.statusCode == HttpStatus.unauthorized) {
-  //     handler.next(err);
-  //
-  //   } else if (err.response?.statusCode == HttpStatus.conflict) {
-  //     handler.next(err);
-  //   }
-  //
-  //   return handler.next(err);
-  // }
-
-  // final versionTest= [
-  //   'v2/',
-  // ];
-
   @override
   void onRequest(
       RequestOptions options,
       RequestInterceptorHandler handler,
       ) async {
 
-
     if (options.path.contains(apiManager.geocoding )) {
       options.baseUrl = apiManager.geocodingApi;
     }
-
 
     super.onRequest(options, handler);
   }

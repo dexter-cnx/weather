@@ -1,6 +1,6 @@
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import '../application.dart';
 
 class WeatherBlocObserver extends BlocObserver {
   const WeatherBlocObserver();
@@ -8,13 +8,13 @@ class WeatherBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
     super.onEvent(bloc, event);
-    log('onEvent $event');
+    logger.i('onEvent $event');
   }
 
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
-    log('onChange $change');
+    logger.i('onChange $change');
   }
 
   @override
@@ -23,12 +23,12 @@ class WeatherBlocObserver extends BlocObserver {
     Transition<dynamic, dynamic> transition,
   ) {
     super.onTransition(bloc, transition);
-    log('onTransition $transition');
+    logger.i('onTransition $transition');
   }
 
   @override
   void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
-    log('onError $error');
+    logger.e('onError $error');
   }
 }
