@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import '../responses/weather_response.dart';
+import 'weather.dart';
 import 'weather_units.dart';
 
 class ListElement {
   final int dt;
   final Main main;
-  final List<Weather> weather;
+  final List<WeatherStatus> weather;
   final Clouds clouds;
   final Wind wind;
   final int visibility;
@@ -30,7 +32,7 @@ class ListElement {
   ListElement copyWith({
     int? dt,
     Main? main,
-    List<Weather>? weather,
+    List<WeatherStatus>? weather,
     Clouds? clouds,
     Wind? wind,
     int? visibility,
@@ -59,8 +61,8 @@ class ListElement {
   factory ListElement.fromMap(Map<String, dynamic> json) => ListElement(
     dt: json["dt"],
     main: Main.fromMap(json["main"] ?? {}),
-    weather:json["weather"] == null ? [] : List<Weather>.from(json["weather"].map((x) => Weather.fromMap(x))),
-    clouds: Clouds.fromMap(json["clouds" ?? {}]),
+    weather:json["weather"] == null ? [] : List<WeatherStatus>.from(json["weather"].map((x) => WeatherStatus.fromMap(x))),
+    clouds: Clouds.fromMap(json["clouds"]?? {}),
     wind: Wind.fromMap(json["wind"] ?? {}),
     visibility: json["visibility"],
     pop: json["pop"]?.toDouble(),
@@ -81,6 +83,13 @@ class ListElement {
     "dt_txt": dtTxt.toIso8601String(),
     "rain": rain.toMap(),
   };
+
+  WeatherInformation get weatherInformation => WeatherInformation(
+    temperature: main.temp,
+    humidity: main.humidity,
+    condition:getCondition(weather.isNotEmpty ? weather.first.id : 0 ),
+    dateTime: DateTime.fromMillisecondsSinceEpoch( dt * 1000 ),
+  );
 }
 class City {
   final int id;

@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
-
 class Clouds {
   final int all;
 
@@ -182,37 +180,37 @@ class Sys {
   };
 }
 
-class Weather {
+class WeatherStatus {
   final int id;
   final String main;
   final String description;
   final String icon;
 
-  Weather({
+  WeatherStatus({
     required this.id,
     required this.main,
     required this.description,
     required this.icon,
   });
 
-  Weather copyWith({
+  WeatherStatus copyWith({
     int? id,
     String? main,
     String? description,
     String? icon,
   }) =>
-      Weather(
+      WeatherStatus(
         id: id ?? this.id,
         main: main ?? this.main,
         description: description ?? this.description,
         icon: icon ?? this.icon,
       );
 
-  factory Weather.fromJson(String str) => Weather.fromMap(json.decode(str));
+  factory WeatherStatus.fromJson(String str) => WeatherStatus.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Weather.fromMap(Map<String, dynamic> json) => Weather(
+  factory WeatherStatus.fromMap(Map<String, dynamic> json) => WeatherStatus(
     id: json["id"] ?? 0,
     main: json["main"]  ?? '',
     description: json["description"]  ?? '',

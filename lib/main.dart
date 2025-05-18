@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:weather/application/application.dart';
-import 'package:weather/application/repositories/weathers/location_repository.dart';
+
+import 'application/application.dart';
+import 'application/repositories/weathers/weather_repository.dart';
 
 
 
@@ -62,9 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
-    final locationRepo = LocationRepository();
-    locationRepo.locationSearch('Chiang Mai').then((result) {
-      logger.i(result.name);
+    final locationRepo = WeatherRepository();
+    locationRepo.getForecastByCityName('Chiang Mai').then((result) {
+      logger.i(result.weatherInfos);
     });
     setState(() {
       // This call to setState tells the Flutter framework that something has

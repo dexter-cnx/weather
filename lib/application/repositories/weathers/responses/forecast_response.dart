@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../models/forecast.dart';
+import '../models/weather.dart';
 
 
 class ForecastResponse {
@@ -52,4 +53,6 @@ class ForecastResponse {
     "list": List<dynamic>.from(list.map((x) => x.toMap())),
     "city": city.toMap(),
   };
+
+  List<WeatherInformation> get weatherInformationList => list.map((e)=> e.weatherInformation).toList();
 }

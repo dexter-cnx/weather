@@ -1,6 +1,6 @@
-import 'dart:io';
 
 import 'package:dio/dio.dart';
+import '../weathers/models/geocoding_result.dart';
 
 const kDefaultConnectionTimeOut = Duration(seconds: 30);
 const kDefaultReceiveTimeOut = Duration(seconds: 30);
@@ -32,23 +32,34 @@ class ApiManager {
     return dio;
   }
 
+  void close() {
+    dio.close();
+  }
+
   final geocodingApi = 'https://geocoding-api.open-meteo.com/v1';
 
   final geocoding = '/search?count=1';
 
+  String weatherByLocationUri(Location location) =>  '$weather&${location.toParams}';
+  String forecastByLocationUri(Location location) =>  '$forecastWholeDay&${location.toParams}';
+
 
   final openWeatherURL = 'https://api.openweathermap.org/data/2.5';
 
-  final weather = 'weather?appid=$openWeatherApiKey';
-  final forecastWholeDay = 'weather?appid=$openWeatherApiKey&cnt=8';
+  final weather = '/weather?appid=$openWeatherApiKey';
+  final forecastWholeDay = '/forecast?appid=$openWeatherApiKey&cnt=8';
 
 
+  String geoCodingByNameURI(String name) => "$geocoding&name=$name";
 
   Future<Response<dynamic>> getGeocodingByCityName(String name) async =>
-      dio.get("$geocoding&name=$name");
+      dio.get(geoCodingByNameURI(name));
 
+  Future<Response<dynamic>> getWeather(Location location) async =>
+      dio.get(weatherByLocationUri(location));
 
-
+  Future<Response<dynamic>> getForecast(Location location) async =>
+      dio.get(forecastByLocationUri(location));
 
 }
 
@@ -61,20 +72,20 @@ class ApiInterceptor extends Interceptor {
 
 
 
-  @override
-  void onError(
-      DioException err,
-      ErrorInterceptorHandler handler,
-      ) async {
-    if (err.response?.statusCode == HttpStatus.unauthorized) {
-      handler.next(err);
-
-    } else if (err.response?.statusCode == HttpStatus.conflict) {
-      handler.next(err);
-    }
-
-    return handler.next(err);
-  }
+  // @override
+  // void onError(
+  //     DioException err,
+  //     ErrorInterceptorHandler handler,
+  //     ) async {
+  //   if (err.response?.statusCode == HttpStatus.unauthorized) {
+  //     handler.next(err);
+  //
+  //   } else if (err.response?.statusCode == HttpStatus.conflict) {
+  //     handler.next(err);
+  //   }
+  //
+  //   return handler.next(err);
+  // }
 
   // final versionTest= [
   //   'v2/',

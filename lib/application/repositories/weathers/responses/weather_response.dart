@@ -1,10 +1,27 @@
 import 'dart:convert';
 
+import 'package:weather/application/repositories/weathers/models/models.dart';
+
 import '../models/weather_units.dart';
+
+WeatherCondition  getCondition(int code) {
+  if (code >= 200 && code <600) {
+    return WeatherCondition.rainy;
+  }
+  if (code >= 600 && code < 700) {
+    return WeatherCondition.snowy;
+  }
+  if (code == 800) {
+    return WeatherCondition.clear;
+  } else if (code > 800) {
+    return WeatherCondition.cloudy;
+  }
+  return WeatherCondition.unknown;
+}
 
 class WeatherResponse {
   final Coord coord;
-  final List<Weather> weather;
+  final List<WeatherStatus> weather;
   final String base;
   final Main main;
   final int visibility;
@@ -38,7 +55,7 @@ class WeatherResponse {
 
   WeatherResponse copyWith({
     Coord? coord,
-    List<Weather>? weather,
+    List<WeatherStatus>? weather,
     String? base,
     Main? main,
     int? visibility,
@@ -75,7 +92,7 @@ class WeatherResponse {
 
   factory WeatherResponse.fromMap(Map<String, dynamic> json) => WeatherResponse(
     coord: Coord.fromMap(json["coord"] ?? {}),
-    weather: List<Weather>.from(json["weather"].map((x) => Weather.fromMap(x))),
+    weather: List<WeatherStatus>.from(json["weather"].map((x) => WeatherStatus.fromMap(x))),
     base: json["base"],
     main: Main.fromMap(json["main"] ?? {}),
     visibility: json["visibility"],
@@ -106,4 +123,13 @@ class WeatherResponse {
     "cod": cod,
     "rain": rain,
   };
+
+
+
+  WeatherInformation get weatherInformation => WeatherInformation(
+    temperature: main.temp,
+    humidity: main.humidity,
+    condition:getCondition(weather.isNotEmpty ? weather.first.id : 0 ),
+    dateTime: DateTime.fromMillisecondsSinceEpoch( dt * 1000 ),
+  );
 }

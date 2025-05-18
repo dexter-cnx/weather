@@ -1,6 +1,24 @@
 
 import 'dart:convert';
 
+
+class Location {
+  const Location({
+    required this.id,
+    required this.name,
+    required this.latitude,
+    required this.longitude,
+  });
+
+
+  final int id;
+  final String name;
+  final double latitude;
+  final double longitude;
+
+  String get toParams => 'lat=$latitude&lon=$longitude';
+}
+
 class GeocodingResult {
   final int id;
   final String name;
@@ -110,4 +128,8 @@ class GeocodingResult {
     "admin1": admin1,
     "admin2": admin2,
   };
+
+  Location get location => Location(id: id, name: name, latitude: latitude, longitude: longitude);
+
+
 }
