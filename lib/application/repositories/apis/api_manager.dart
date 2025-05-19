@@ -47,7 +47,7 @@ class ApiManager {
   final openWeatherURL = 'https://api.openweathermap.org/data/2.5';
 
   final weather = '/weather?appid=$openWeatherApiKey';
-  final forecastWholeDay = '/forecast?appid=$openWeatherApiKey';
+  final forecastWholeDay = '/forecast?appid=$openWeatherApiKey&cnt=8';
 
 
   String geoCodingByNameURI(String name) => "$geocoding&name=$name";
