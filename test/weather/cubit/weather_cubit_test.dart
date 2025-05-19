@@ -104,8 +104,8 @@ void main() {
 
     group('refreshWeather', () {
 
-      final  weatherInformation =
-      WeatherInformation(temperature: 304, humidity: 60, condition:  WeatherCondition.rainy, dateTime: DateTime(2025) );
+      // final  weatherInformation =
+      // WeatherInformation(temperature: 304, humidity: 60, condition:  WeatherCondition.rainy, dateTime: DateTime(2025) );
 
       blocTest<WeatherCubit, WeatherState>(
         'emits nothing when status is not success',

@@ -11,7 +11,6 @@ class WeatherEmpty extends StatelessWidget {
     return InkWell(
         onTap: () {
           Navigator.of(context).push(SearchPage.route());
-
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,
