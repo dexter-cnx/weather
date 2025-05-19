@@ -29,6 +29,7 @@ class WeatherPopulated extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final dateFormat = DateFormat('dd-MM-yyyy HH:mm');
+
     return Stack(
       children: [
         _WeatherBackground(),
@@ -123,6 +124,9 @@ class WeatherPopulated extends StatelessWidget {
                         ),
                         Builder(
                           builder: (context) {
+                            if (forecast.weatherInfos.isEmpty) {
+                              return SizedBox();
+                            }
                             final first = dateFormat.format(forecast.weatherInfos.first.dateTime);
                             final last = dateFormat.format(forecast.weatherInfos.last.dateTime);
                             return Text(

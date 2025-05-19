@@ -34,16 +34,11 @@ class _SearchPageState extends State<SearchPage> {
     Future<String?> onSubmitted() async {
       try {
         final cubit = context.read<WeatherCubit>();
-        // cubit.getLocationByCity(_text).then((location) {
-        //   cubit.fetchWeatherByLocation(location);
-        //   _errorMessage = null;
-        //   //Navigator.of(context).pop();
-        // });
         final location = await cubit.getLocationByCity(_text);
         cubit.fetchWeatherByLocation(location);
         _errorMessage = null;
         if (context.mounted) {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(_text);
         }
         //
         // Navigator.of(context).pop();
@@ -88,7 +83,8 @@ class _SearchPageState extends State<SearchPage> {
           // IconButton(
           //   key: const Key('searchPage_search_iconButton'),
           //   icon: const Icon(Icons.search, semanticLabel: 'Submit'),
-          //   onPressed: () => Navigator.of(context).pop(_text),
+          //   onPressed: ()=> onSubmitted(),
+          //   //onPressed: () => Navigator.of(context).pop(_text),
           // ),
         ],
       ),

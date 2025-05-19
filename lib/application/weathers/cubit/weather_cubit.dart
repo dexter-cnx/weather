@@ -16,13 +16,35 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
 
   Future<void> fetchWeather(String city) async {
     if (city.isNotEmpty) {
+      emit(state.copyWith(status: WeatherStatus.loading));
       try {
-        final location = await _weatherRepository.locationSearch(city);
 
-        fetchWeatherByLocation(location);
+
+        final weather = Weather.fromRepository(
+          await _weatherRepository.getWeatherByCityName(city),
+        );
+        final forecast = Forecast.fromRepository(
+          await _weatherRepository.getForecastByCityName(city),
+        );
+
+        emit(
+          state.copyWith(
+            status: WeatherStatus.success,
+            weather: weather,
+            forecast: forecast,
+          ),
+        );
       } on Exception  {
         emit(state.copyWith(status: WeatherStatus.failure));
       }
+
+      // try {
+      //   final location = await _weatherRepository.locationSearch(city);
+      //
+      //   fetchWeatherByLocation(location);
+      // } on Exception  {
+      //   emit(state.copyWith(status: WeatherStatus.failure));
+      // }
     }
   }
 

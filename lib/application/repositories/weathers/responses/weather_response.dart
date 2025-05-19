@@ -124,8 +124,6 @@ class WeatherResponse {
     "rain": rain,
   };
 
-
-
   WeatherInformation get weatherInformation => WeatherInformation(
     temperature: main.temp,
     humidity: main.humidity,

@@ -53,6 +53,21 @@ class WeatherInformation extends Equatable {
 
   );
 
+  WeatherInformation copyWith({
+    double? temperature,
+    int? humidity,
+    WeatherCondition? condition,
+    DateTime? dateTime
+  }) {
+    return  WeatherInformation(
+      temperature: temperature ?? this.temperature,
+      humidity: humidity ?? this.humidity,
+      condition: condition ?? this.condition,
+      dateTime: dateTime ?? this.dateTime,
+
+    );
+  }
+
   @override
   List<Object> get props => [temperature,humidity,condition,dateTime];
 
@@ -70,17 +85,6 @@ class Weather extends Equatable {
     required this.location,
     required this.weatherInfo,
   });
-
-
-
-  // factory Weather.fromRepository(weather_repository.Weather weather) {
-  //   return Weather(
-  //     condition: weather.condition,
-  //     lastUpdated: DateTime.now(),
-  //     location: weather.location,
-  //     temperature: Temperature(value: weather.temperature),
-  //   );
-  // }
 
   static final empty = Weather(
     location: '--',

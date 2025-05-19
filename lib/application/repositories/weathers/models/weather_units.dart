@@ -186,6 +186,8 @@ class WeatherStatus {
   final String description;
   final String icon;
 
+
+
   WeatherStatus({
     required this.id,
     required this.main,

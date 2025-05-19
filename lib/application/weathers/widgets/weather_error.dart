@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../search/view/search_page.dart';
+
 class WeatherError extends StatelessWidget {
   const WeatherError({super.key});
 
@@ -16,7 +18,7 @@ class WeatherError extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-
+            Navigator.of(context).push(SearchPage.route());
           },
           child: Text(
             'Try again',

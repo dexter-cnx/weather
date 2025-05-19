@@ -38,7 +38,7 @@ Weather _$WeatherFromJson(Map<String, dynamic> json) => Weather(
 
 Map<String, dynamic> _$WeatherToJson(Weather instance) => <String, dynamic>{
       'location': instance.location,
-      'weatherInfo': instance.weatherInfo,
+      'weatherInfo': instance.weatherInfo.toJson(),
     };
 
 Forecast _$ForecastFromJson(Map<String, dynamic> json) => Forecast(
